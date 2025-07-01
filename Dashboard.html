@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NFA BLUES Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #1e3a8a, #2563eb);
+      font-family: 'Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-white">
+
+  <!-- Header -->
+  <header class="text-center py-6 shadow-lg bg-blue-900 bg-opacity-60">
+    <h1 class="text-4xl font-bold">NFA BLUES</h1>
+    <p class="text-sm text-blue-200 mt-2">Coach's Control Panel</p>
+  </header>
+
+  <!-- Dashboard Body -->
+  <main class="p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+
+    <!-- Players -->
+    <div class="bg-white/10 rounded-xl p-6 text-center shadow-lg hover:scale-105 transition">
+      <h2 class="text-xl font-semibold mb-2">👥 Players</h2>
+      <p class="text-sm mb-4">View or manage squad members</p>
+      <button class="bg-green-600 px-4 py-2 rounded hover:bg-green-700">Open</button>
+    </div>
+
+    <!-- Fixtures -->
+    <div class="bg-white/10 rounded-xl p-6 text-center shadow-lg hover:scale-105 transition">
+      <h2 class="text-xl font-semibold mb-2">📆 Fixtures</h2>
+      <p class="text-sm mb-4">Upcoming matches and results</p>
+      <button class="bg-green-600 px-4 py-2 rounded hover:bg-green-700">Open</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="bg-white/10 rounded-xl p-6 text-center shadow-lg hover:scale-105 transition">
+      <h2 class="text-xl font-semibold mb-2">📊 Stats</h2>
+      <p class="text-sm mb-4">Track performance and metrics</p>
+      <button class="bg-green-600 px-4 py-2 rounded hover:bg-green-700">Open</button>
+    </div>
+
+    <!-- Admin -->
+    <div class="bg-white/10 rounded-xl p-6 text-center shadow-lg hover:scale-105 transition">
+      <h2 class="text-xl font-semibold mb-2">⚙️ Admin</h2>
+      <p class="text-sm mb-4">Change image, passcode, settings</p>
+      <button class="bg-yellow-600 px-4 py-2 rounded hover:bg-yellow-700">Configure</button>
+    </div>
+
+  </main>
+
+</body>
+</html>
