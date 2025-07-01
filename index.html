@@ -54,7 +54,7 @@
     function verifyPasscode() {
       const input = document.getElementById('passcodeInput').value;
       if (input === '000000') {
-        alert('Access Granted! (Next step: Redirect to dashboard)');
+        window.location.href = 'dashboard.html';
         // Later: location.href = 'dashboard.html';
       } else {
         alert('Incorrect passcode.');
