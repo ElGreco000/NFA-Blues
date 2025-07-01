@@ -13,19 +13,15 @@
   </style>
 </head>
 <body class="flex flex-col items-center justify-center h-screen text-white">
-  <!-- Team Title -->
   <h1 class="text-5xl font-bold mb-8 drop-shadow-lg">NFA BLUES</h1>
 
-  <!-- Image Section -->
   <div class="relative">
     <img id="teamImage" src="https://via.placeholder.com/400x250?text=Team+Logo" alt="Team Logo" class="rounded-xl shadow-lg w-[400px] h-[250px] object-cover"/>
-    <!-- Image Change Icon -->
     <a href="https://drive.google.com/" target="_blank" class="absolute bottom-2 right-2 text-sm text-white bg-black/40 px-2 py-1 rounded hover:bg-black/70">
       🔗 Change Image
     </a>
   </div>
 
-  <!-- Buttons -->
   <div class="mt-10 flex gap-10">
     <button onclick="showPasscodePrompt()" class="bg-green-500 hover:bg-green-600 text-white text-xl font-semibold py-2 px-6 rounded-lg shadow-md">
       ⚽ Enter
@@ -35,7 +31,6 @@
     </button>
   </div>
 
-  <!-- Passcode Modal -->
   <div id="passcodeModal" class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center hidden">
     <div class="bg-white text-black p-6 rounded-lg shadow-lg w-96 text-center">
       <h2 class="text-xl font-bold mb-4">Enter Passcode</h2>
@@ -60,7 +55,7 @@
       const input = document.getElementById('passcodeInput').value;
       if (input === '000000') {
         alert('Access Granted! (Next step: Redirect to dashboard)');
-        // TODO: Redirect to dashboard.html
+        // Later: location.href = 'dashboard.html';
       } else {
         alert('Incorrect passcode.');
       }
