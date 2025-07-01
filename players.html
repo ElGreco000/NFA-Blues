@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NFA BLUES – Players</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #1e3a8a, #2563eb);
+      font-family: 'Segoe UI', sans-serif;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-white px-6 py-8">
+
+  <!-- Header -->
+  <header class="text-center mb-10">
+    <h1 class="text-4xl font-bold">NFA BLUES</h1>
+    <p class="text-sm text-blue-200 mt-2">Manage Squad Members</p>
+    <a href="dashboard.html" class="underline text-sm text-blue-100 hover:text-white">← Back to Dashboard</a>
+  </header>
+
+  <!-- Player Form -->
+  <section class="max-w-3xl mx-auto bg-white/10 rounded-xl p-6 mb-8 shadow-lg">
+    <h2 class="text-xl font-semibold mb-4">Add New Player</h2>
+    <form id="playerForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <input required type="text" id="name" placeholder="Name" class="px-3 py-2 rounded text-black"/>
+      <input required type="text" id="position" placeholder="Position" class="px-3 py-2 rounded text-black"/>
+      <input required type="number" id="number" placeholder="Shirt #" class="px-3 py-2 rounded text-black"/>
+      <button type="submit" class="col-span-full bg-green-600 hover:bg-green-700 mt-2 px-4 py-2 rounded">Add Player</button>
+    </form>
+  </section>
+
+  <!-- Player List -->
+  <section class="max-w-3xl mx-auto bg-white/10 rounded-xl p-6 shadow-lg">
+    <h2 class="text-xl font-semibold mb-4">Squad List</h2>
+    <table class="w-full text-left text-sm">
+      <thead>
+        <tr class="border-b border-white/30">
+          <th>Name</th>
+          <th>Position</th>
+          <th>Shirt #</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="playerTable" class="divide-y divide-white/20">
+        <!-- Players will appear here -->
+      </tbody>
+    </table>
+  </section>
+
+  <script>
+    const playerForm = document.getElementById('playerForm');
+    const playerTable = document.getElementById('playerTable');
+    let players = [];
+
+    playerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const position = document.getElementById('position').value.trim();
+      const number = document.getElementById('number').value.trim();
+
+      if (!name || !position || !number) return;
+
+      const player = { name, position, number };
+      players.push(player);
+      updateTable();
+      playerForm.reset();
+    });
+
+    function updateTable() {
+      playerTable.innerHTML = '';
+      players.forEach((player, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${player.name}</td>
+          <td>${player.position}</td>
+          <td>${player.number}</td>
+          <td>
+            <button onclick="removePlayer(${index})" class="bg-red-600 hover:bg-red-700 px-2 py-1 text-white rounded text-xs">Remove</button>
+          </td>
+        `;
+        playerTable.appendChild(row);
+      });
+    }
+
+    function removePlayer(index) {
+      players.splice(index, 1);
+      updateTable();
+    }
+  </script>
+
+</body>
+</html>
