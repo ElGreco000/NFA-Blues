@@ -50,10 +50,12 @@
     </table>
   </section>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+<!-- Firebase App and Firestore (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
+<script>
+  // Your Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSy07ybq5m5NfXzfR8w90fnspuaOokY-ZUtCI",
     authDomain: "nfa-blues.firebaseapp.com",
@@ -63,47 +65,48 @@
     appId: "1:320625460158:web:337358d0491e22cd4f6fef"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const playersRef = collection(db, "players");
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 
   const playerForm = document.getElementById('playerForm');
   const playerTable = document.getElementById('playerTable');
 
+  // Add player
   playerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('name').value.trim();
     const position = document.getElementById('position').value.trim();
     const number = document.getElementById('number').value.trim();
     if (!name || !position || !number) return;
-    await addDoc(playersRef, { name, position, number });
+    await db.collection("players").add({ name, position, number });
     playerForm.reset();
   });
 
-  async function removePlayer(id) {
-    await deleteDoc(doc(db, "players", id));
-  }
-
-  onSnapshot(playersRef, (snapshot) => {
+  // Load players and update table
+  db.collection("players").onSnapshot((snapshot) => {
     playerTable.innerHTML = '';
-    snapshot.forEach((docSnap) => {
-      const player = docSnap.data();
+    snapshot.forEach((doc) => {
+      const player = doc.data();
       const row = document.createElement('tr');
       row.innerHTML = `
         <td>${player.name}</td>
         <td>${player.position}</td>
         <td>${player.number}</td>
         <td>
-          <button onclick="removePlayer('${docSnap.id}')" class="bg-red-600 hover:bg-red-700 px-2 py-1 text-white rounded text-xs">Remove</button>
+          <button onclick="removePlayer('${doc.id}')" class="bg-red-600 hover:bg-red-700 px-2 py-1 text-white rounded text-xs">Remove</button>
         </td>
       `;
       playerTable.appendChild(row);
     });
   });
 
-  // Expose function globally so it works from inline HTML
-  window.removePlayer = removePlayer;
+  // Remove player
+  async function removePlayer(id) {
+    await db.collection("players").doc(id).delete();
+  }
 </script>
+
 
 
 </body>
