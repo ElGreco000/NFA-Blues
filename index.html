@@ -26,7 +26,7 @@
     <button onclick="showPasscodePrompt()" class="bg-green-500 hover:bg-green-600 text-white text-xl font-semibold py-2 px-6 rounded-lg shadow-md">
       ⚽ Enter
     </button>
-    <button onclick="window.close()" class="bg-red-500 hover:bg-red-600 text-white text-xl font-semibold py-2 px-6 rounded-lg shadow-md">
+    <button onclick="leaveApp()" class="bg-red-500 hover:bg-red-600 text-white text-xl font-semibold py-2 px-6 rounded-lg shadow-md">
       🚪 Leave
     </button>
   </div>
@@ -43,6 +43,11 @@
   </div>
 
   <script>
+
+    function leaveApp() {
+    alert("Thanks for visiting NFA BLUES!");
+    window.location.href = "https://www.google.com"; // or your home/exit link
+    }
     function showPasscodePrompt() {
       document.getElementById('passcodeModal').classList.remove('hidden');
     }
