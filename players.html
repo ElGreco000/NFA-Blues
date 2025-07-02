@@ -50,47 +50,61 @@
     </table>
   </section>
 
-  <script>
-    const playerForm = document.getElementById('playerForm');
-    const playerTable = document.getElementById('playerTable');
-    let players = [];
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    playerForm.addEventListener('submit', (e) => {
-      e.preventDefault();
+  const firebaseConfig = {
+    apiKey: "AIzaSy07ybq5m5NfXzfR8w90fnspuaOokY-ZUtCI",
+    authDomain: "nfa-blues.firebaseapp.com",
+    projectId: "nfa-blues",
+    storageBucket: "nfa-blues.appspot.com",
+    messagingSenderId: "320625460158",
+    appId: "1:320625460158:web:337358d0491e22cd4f6fef"
+  };
 
-      const name = document.getElementById('name').value.trim();
-      const position = document.getElementById('position').value.trim();
-      const number = document.getElementById('number').value.trim();
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const playersRef = collection(db, "players");
 
-      if (!name || !position || !number) return;
+  const playerForm = document.getElementById('playerForm');
+  const playerTable = document.getElementById('playerTable');
 
-      const player = { name, position, number };
-      players.push(player);
-      updateTable();
-      playerForm.reset();
+  playerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const position = document.getElementById('position').value.trim();
+    const number = document.getElementById('number').value.trim();
+    if (!name || !position || !number) return;
+    await addDoc(playersRef, { name, position, number });
+    playerForm.reset();
+  });
+
+  async function removePlayer(id) {
+    await deleteDoc(doc(db, "players", id));
+  }
+
+  onSnapshot(playersRef, (snapshot) => {
+    playerTable.innerHTML = '';
+    snapshot.forEach((docSnap) => {
+      const player = docSnap.data();
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${player.name}</td>
+        <td>${player.position}</td>
+        <td>${player.number}</td>
+        <td>
+          <button onclick="removePlayer('${docSnap.id}')" class="bg-red-600 hover:bg-red-700 px-2 py-1 text-white rounded text-xs">Remove</button>
+        </td>
+      `;
+      playerTable.appendChild(row);
     });
+  });
 
-    function updateTable() {
-      playerTable.innerHTML = '';
-      players.forEach((player, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${player.name}</td>
-          <td>${player.position}</td>
-          <td>${player.number}</td>
-          <td>
-            <button onclick="removePlayer(${index})" class="bg-red-600 hover:bg-red-700 px-2 py-1 text-white rounded text-xs">Remove</button>
-          </td>
-        `;
-        playerTable.appendChild(row);
-      });
-    }
+  // Expose function globally so it works from inline HTML
+  window.removePlayer = removePlayer;
+</script>
 
-    function removePlayer(index) {
-      players.splice(index, 1);
-      updateTable();
-    }
-  </script>
 
 </body>
 </html>
