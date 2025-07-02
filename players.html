@@ -55,7 +55,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
 <script>
-  // Your Firebase config
   const firebaseConfig = {
     apiKey: "AIzaSy07ybq5m5NfXzfR8w90fnspuaOokY-ZUtCI",
     authDomain: "nfa-blues.firebaseapp.com",
@@ -65,12 +64,13 @@
     appId: "1:320625460158:web:337358d0491e22cd4f6fef"
   };
 
-  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 
   const playerForm = document.getElementById('playerForm');
   const playerTable = document.getElementById('playerTable');
+
+  let editingId = null;
 
   // Add player
   playerForm.addEventListener('submit', async (e) => {
@@ -79,11 +79,21 @@
     const position = document.getElementById('position').value.trim();
     const number = document.getElementById('number').value.trim();
     if (!name || !position || !number) return;
-    await db.collection("players").add({ name, position, number });
+
+    if (editingId) {
+      // Update existing player
+      await db.collection("players").doc(editingId).update({ name, position, number });
+      editingId = null;
+      playerForm.querySelector("button[type='submit']").textContent = "Add Player";
+    } else {
+      // Add new player
+      await db.collection("players").add({ name, position, number });
+    }
+
     playerForm.reset();
   });
 
-  // Load players and update table
+  // Load players live
   db.collection("players").onSnapshot((snapshot) => {
     playerTable.innerHTML = '';
     snapshot.forEach((doc) => {
@@ -93,7 +103,8 @@
         <td>${player.name}</td>
         <td>${player.position}</td>
         <td>${player.number}</td>
-        <td>
+        <td class="flex gap-2">
+          <button onclick="editPlayer('${doc.id}', '${player.name}', '${player.position}', '${player.number}')" class="bg-yellow-500 hover:bg-yellow-600 px-2 py-1 text-white rounded text-xs">Edit</button>
           <button onclick="removePlayer('${doc.id}')" class="bg-red-600 hover:bg-red-700 px-2 py-1 text-white rounded text-xs">Remove</button>
         </td>
       `;
@@ -105,7 +116,21 @@
   async function removePlayer(id) {
     await db.collection("players").doc(id).delete();
   }
+
+  // Edit player
+  function editPlayer(id, name, position, number) {
+    document.getElementById('name').value = name;
+    document.getElementById('position').value = position;
+    document.getElementById('number').value = number;
+    editingId = id;
+    playerForm.querySelector("button[type='submit']").textContent = "Save Changes";
+  }
+
+  // Expose for inline use
+  window.removePlayer = removePlayer;
+  window.editPlayer = editPlayer;
 </script>
+
 
 
 
